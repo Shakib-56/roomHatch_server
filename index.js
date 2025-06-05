@@ -22,14 +22,46 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
+    // Connect the client to  server	(optional starting in v4.7)
     await client.connect();
+  const roomMateCollection=client.db("roomMateDB").collection("roommates");
+    const userCollection=client.db("roomMateDB").collection("users");
+
+  // create roommates
+  app.post("/roommates",async(req,res)=>{
+    const newRoomMates=req.body;
+    console.log(newRoomMates);
+    const result=await roomMateCollection.insertOne(newRoomMates);
+    res.send(result);
+  })
+  // create users
+  app.post("/users",async(req,res)=>{
+    const newUser=req.body;
+    console.log(newUser);
+    const result=await userCollection.insertOne(newUser);
+    res.send(result);
+  })
+  app.get("/users",async(req,res)=>{
+    const users=await userCollection.find().toArray()
+    res.send(users);
+  })
+
+// read
+app.get("/roommates", async (req, res) => {
+      try {
+        const roommates = await roomMateCollection.find().toArray();
+        res.send(roommates);
+      } catch (error) {
+        res.status(500).send({ error: "Failed to fetch roommates" });
+      }
+    });
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
   }
 }
 run().catch(console.dir);
