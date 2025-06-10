@@ -48,7 +48,10 @@ async function run() {
   app.get("/users/:email",async(req,res)=>{
       try {
     const email = req.params.email;
-    const user = await userCollection.findOne({ email: email });
+    const query={
+      email:email
+    }
+    const user = await userCollection.findOne(query);
 
     if (!user) {
       return res.status(404).send({ message: "User not found" });
@@ -69,6 +72,13 @@ app.get("/roommates", async (req, res) => {
         res.status(500).send({ error: "Failed to fetch roommates" });
       }
     });
+    // read single roommates data
+    app.get("/roommates/:id",async(req,res)=>{
+      const id=req.params.id;
+      const query={_id:new ObjectId(id)}
+      const result=await roomMateCollection.findOne(query);
+      res.send(result);
+    })
 
 
     // Send a ping to confirm a successful connection
