@@ -72,7 +72,7 @@ app.get("/roommates", async (req, res) => {
         res.status(500).send({ error: "Failed to fetch roommates" });
       }
     });
-
+    // // read single roommates data
     app.get("/roommates/:id",async(req,res)=>{
       const id=req.params.id;
       const query={_id:new ObjectId(id)}
@@ -80,8 +80,6 @@ app.get("/roommates", async (req, res) => {
       res.send(result);
     })
     
-
-    // // read single roommates data
     // delete data 
     app.delete("/roommates/:id",async(req,res)=>{
     const id=req.params.id;
@@ -90,7 +88,19 @@ app.get("/roommates", async (req, res) => {
     res.send(result);
     })
 
-    
+    // update data
+  app.put("/roommates/:id",async(req,res)=>{
+  const id=req.params.id;
+  const filter={_id:new ObjectId(id)};
+  const options={upsert:true};
+  const updatedRoommate=req.body;
+  const updatedDoc={
+    $set:updatedRoommate
+  };
+  const result=await roomMateCollection.updateOne(filter,updatedDoc,options);
+  res.send(result);
+
+})
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
