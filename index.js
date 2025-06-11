@@ -72,24 +72,25 @@ app.get("/roommates", async (req, res) => {
         res.status(500).send({ error: "Failed to fetch roommates" });
       }
     });
-    //get all data which is user added
-    app.get("/roommates/:email",async(req,res)=>{
-      const email=req.params.email;
-      const query={
-        email:email
-      }
-      const result= await roomMateCollection.find(query).toArray()
-      res.send(result);
 
-    })
-    // read single roommates data
     app.get("/roommates/:id",async(req,res)=>{
       const id=req.params.id;
       const query={_id:new ObjectId(id)}
       const result=await roomMateCollection.findOne(query);
       res.send(result);
     })
+    
 
+    // // read single roommates data
+    // delete data 
+    app.delete("/roommates/:id",async(req,res)=>{
+    const id=req.params.id;
+    const query={_id:new ObjectId(id)}
+    const result=await roomMateCollection.deleteOne(query);
+    res.send(result);
+    })
+
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
