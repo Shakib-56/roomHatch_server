@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app=express()
 require('dotenv').config()
 
@@ -54,7 +54,7 @@ async function run() {
     const user = await userCollection.findOne(query);
 
     if (!user) {
-      return res.status(404).send({ message: "User not found" });
+      return res.status(404).send({ message: "User not found" })
     }
 
     res.send(user);
@@ -72,6 +72,16 @@ app.get("/roommates", async (req, res) => {
         res.status(500).send({ error: "Failed to fetch roommates" });
       }
     });
+    //get all data which is user added
+    app.get("/roommates/:email",async(req,res)=>{
+      const email=req.params.email;
+      const query={
+        email:email
+      }
+      const result= await roomMateCollection.find(query).toArray()
+      res.send(result);
+
+    })
     // read single roommates data
     app.get("/roommates/:id",async(req,res)=>{
       const id=req.params.id;
