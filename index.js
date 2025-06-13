@@ -1,8 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app=express()
-require('dotenv').config()
 
 const port=process.env.PORT || 3000;
 
@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to  server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
   const roomMateCollection=client.db("roomMateDB").collection("roommates");
     const userCollection=client.db("roomMateDB").collection("users");
 
@@ -103,8 +103,8 @@ app.get("/roommates", async (req, res) => {
 })
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
   }
